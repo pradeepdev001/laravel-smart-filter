@@ -53,7 +53,7 @@ php artisan vendor:publish --tag=smart-filter-config
 Add the `Filterable` trait to any Eloquent model:
 
 ```php
-use YourVendor\SmartFilter\Traits\Filterable;
+use Pradeepdev\SmartFilter\Traits\Filterable;
 
 class User extends Model
 {
@@ -218,9 +218,9 @@ Model properties always take precedence over global config:
 Register a custom operator in a service provider:
 
 ```php
-use YourVendor\SmartFilter\Facades\SmartFilter;
-use YourVendor\SmartFilter\Contracts\OperatorContract;
-use YourVendor\SmartFilter\DTOs\FilterInput;
+use Pradeepdev\SmartFilter\Facades\SmartFilter;
+use Pradeepdev\SmartFilter\Contracts\OperatorContract;
+use Pradeepdev\SmartFilter\DTOs\FilterInput;
 use Illuminate\Database\Eloquent\Builder;
 
 class StartsWithOperator implements OperatorContract
