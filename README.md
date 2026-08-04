@@ -6,7 +6,7 @@
 [![PHP Version](https://img.shields.io/badge/php-%5E8.2-blue)](https://packagist.org/packages/pradeepdev001/laravel-smart-filter)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-A powerful, elegant, and extensible Eloquent filtering package for Laravel 11 & 12.
+A powerful, elegant, and extensible Eloquent filtering package for Laravel 10, 11 & 12.
 
 Stop writing repetitive `when()` chains. Let your URL do the talking.
 
@@ -29,7 +29,7 @@ User::smartFilter()->paginate();
 ## Requirements
 
 - PHP 8.2+
-- Laravel 11 or 12
+- Laravel 10, 11, or 12
 
 ---
 
