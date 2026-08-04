@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] — 2024-01-02
+
+### Added
+- Phase 2 — Relationship filtering
+- Dot-notation URL syntax: `?posts.status=published`, `?company.city~New`
+- All Phase 1 operators usable inside relationship subqueries
+- Nested relationship chaining: `?company.address.city=London` (unlimited depth)
+- Existence checks: `?posts=has`, `?posts=doesntHave`, `?posts=orHas`
+- `HasMany`, `BelongsTo`, `BelongsToMany`, `HasOne` all supported
+- `RelationFilterInput` immutable DTO with recursive `withoutRootRelation()`
+- `RelationFilterApplier` with recursive `whereHas` chaining
+- `FilterCollection::withRelationFilter()` and `::relationFilters()`
+- `RequestParser` auto-routes dot-notation params to relation bucket
+- 24 new tests — 105 total, 210 assertions
+
 ## [1.0.0] — 2024-01-01
 
 ### Added
