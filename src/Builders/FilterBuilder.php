@@ -13,10 +13,11 @@ use Pradeepdev\SmartFilter\Support\FieldGuard;
  * Applies a FilterCollection to an Eloquent Builder.
  *
  * The FilterBuilder is the last stop in the pipeline. It:
- *   1. Validates and resolves fields via FieldGuard
- *   2. Delegates each filter to the correct operator
- *   3. Applies sorting
- *   4. Applies search (if searchable fields are configured)
+ *   1. Validates and resolves flat fields via FieldGuard
+ *   2. Delegates each flat filter to the correct operator
+ *   3. Delegates each relation filter to RelationFilterApplier
+ *   4. Applies sorting
+ *   5. Applies search (if searchable fields are configured)
  *
  * This class knows nothing about HTTP. It only works with DTOs.
  */
@@ -33,6 +34,7 @@ final class FilterBuilder
     public function apply(Builder $builder, FilterCollection $collection): Builder
     {
         $builder = $this->applyFilters($builder, $collection);
+        $builder = $this->applyRelationFilters($builder, $collection);
         $builder = $this->applySorts($builder, $collection);
         $builder = $this->applySearch($builder, $collection);
 
@@ -52,6 +54,24 @@ final class FilterBuilder
 
             $operator = $this->registry->resolve($resolved->operator);
             $builder  = $operator->apply($builder, $resolved);
+        }
+
+        return $builder;
+    }
+
+    private function applyRelationFilters(Builder $builder, FilterCollection $collection): Builder
+    {
+        if (! $collection->hasRelationFilters()) {
+            return $builder;
+        }
+
+        // The relation applier uses a permissive guard (no field restrictions)
+        // because field-level restrictions on related models are enforced inside
+        // RelationFilterApplier using the relation's own model guard.
+        $applier = new RelationFilterApplier($this->registry, $this->guard);
+
+        foreach ($collection->relationFilters() as $relationFilter) {
+            $builder = $applier->apply($builder, $relationFilter);
         }
 
         return $builder;

@@ -38,8 +38,16 @@ abstract class TestCase extends Orchestra
 
     private function setUpDatabase(): void
     {
+        Schema::create('companies', function (Blueprint $table): void {
+            $table->id();
+            $table->string('name');
+            $table->string('city')->nullable();
+            $table->timestamps();
+        });
+
         Schema::create('users', function (Blueprint $table): void {
             $table->id();
+            $table->unsignedBigInteger('company_id')->nullable();
             $table->string('name');
             $table->string('email')->unique();
             $table->string('status')->default('active');
@@ -58,6 +66,18 @@ abstract class TestCase extends Orchestra
             $table->text('body')->nullable();
             $table->string('status')->default('draft');
             $table->timestamps();
+        });
+
+        Schema::create('roles', function (Blueprint $table): void {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
+        });
+
+        Schema::create('role_user', function (Blueprint $table): void {
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('role_id');
+            $table->primary(['user_id', 'role_id']);
         });
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Pradeepdev\SmartFilter\Collections;
 
 use Pradeepdev\SmartFilter\DTOs\FilterInput;
+use Pradeepdev\SmartFilter\DTOs\RelationFilterInput;
 use Pradeepdev\SmartFilter\DTOs\SearchInput;
 use Pradeepdev\SmartFilter\DTOs\SortInput;
 
@@ -18,11 +19,13 @@ use Pradeepdev\SmartFilter\DTOs\SortInput;
 final class FilterCollection
 {
     /**
-     * @param  list<FilterInput>  $filters
-     * @param  list<SortInput>    $sorts
+     * @param  list<FilterInput>         $filters
+     * @param  list<RelationFilterInput> $relationFilters
+     * @param  list<SortInput>           $sorts
      */
     public function __construct(
         private array $filters = [],
+        private array $relationFilters = [],
         private array $sorts = [],
         private ?SearchInput $search = null,
     ) {}
@@ -31,6 +34,12 @@ final class FilterCollection
     public function filters(): array
     {
         return $this->filters;
+    }
+
+    /** @return list<RelationFilterInput> */
+    public function relationFilters(): array
+    {
+        return $this->relationFilters;
     }
 
     /** @return list<SortInput> */
@@ -49,6 +58,11 @@ final class FilterCollection
         return $this->filters !== [];
     }
 
+    public function hasRelationFilters(): bool
+    {
+        return $this->relationFilters !== [];
+    }
+
     public function hasSorts(): bool
     {
         return $this->sorts !== [];
@@ -61,16 +75,30 @@ final class FilterCollection
 
     public function isEmpty(): bool
     {
-        return ! $this->hasFilters() && ! $this->hasSorts() && ! $this->hasSearch();
+        return ! $this->hasFilters()
+            && ! $this->hasRelationFilters()
+            && ! $this->hasSorts()
+            && ! $this->hasSearch();
     }
 
     /**
-     * Return a new collection with an additional filter appended.
+     * Return a new collection with an additional flat filter appended.
      */
     public function withFilter(FilterInput $filter): self
     {
         $clone          = clone $this;
         $clone->filters = [...$this->filters, $filter];
+
+        return $clone;
+    }
+
+    /**
+     * Return a new collection with an additional relation filter appended.
+     */
+    public function withRelationFilter(RelationFilterInput $filter): self
+    {
+        $clone                  = clone $this;
+        $clone->relationFilters = [...$this->relationFilters, $filter];
 
         return $clone;
     }

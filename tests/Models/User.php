@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Pradeepdev\SmartFilter\Tests\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Pradeepdev\SmartFilter\Traits\Filterable;
 
@@ -23,6 +25,7 @@ class User extends Model
         'country',
         'is_active',
         'deleted_at',
+        'company_id',
     ];
 
     protected array $filterable = [
@@ -35,6 +38,7 @@ class User extends Model
         'is_active',
         'deleted_at',
         'created_at',
+        'company_id',
     ];
 
     protected array $searchable = ['name', 'email'];
@@ -44,5 +48,15 @@ class User extends Model
     public function posts(): HasMany
     {
         return $this->hasMany(Post::class);
+    }
+
+    public function company(): BelongsTo
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(Role::class, 'role_user');
     }
 }

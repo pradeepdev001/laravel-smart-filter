@@ -9,6 +9,7 @@ use Illuminate\Support\Arr;
 use Pradeepdev\SmartFilter\Collections\FilterCollection;
 use Pradeepdev\SmartFilter\Contracts\ParserContract;
 use Pradeepdev\SmartFilter\DTOs\FilterInput;
+use Pradeepdev\SmartFilter\DTOs\RelationFilterInput;
 use Pradeepdev\SmartFilter\DTOs\SearchInput;
 use Pradeepdev\SmartFilter\DTOs\SortInput;
 use Pradeepdev\SmartFilter\Enums\Operator;
@@ -33,12 +34,21 @@ use Pradeepdev\SmartFilter\Enums\Operator;
  *   ?active=true|false|1|0      → boolean
  *   ?sort=-created_at,name      → sorting
  *   ?search=john                → full-text search
+ *
+ * Phase 2 — Relationship filtering (dot notation):
+ *   ?posts.status=published     → whereHas('posts', fn($q) => $q->where('status','published'))
+ *   ?posts.title~laravel        → whereHas('posts', fn($q) => $q->where('title','LIKE','%laravel%'))
+ *   ?company.address.city=NYC   → nested whereHas chaining
+ *   ?posts=has                  → has('posts')
+ *   ?posts=doesntHave           → doesntHave('posts')
+ *   ?posts=orHas                → orHas('posts')
  */
 final class RequestParser implements ParserContract
 {
     /**
      * Regex to extract the operator from the query param key.
      * Supports: >=, <=, !=, >, <, ~, !~
+     * Also supports dot-notation fields like posts.status or company.address.city
      */
     private const KEY_OPERATOR_PATTERN = '/^(?P<field>[a-zA-Z0-9_.]+)(?P<op>>=|<=|!=|>|<|!~|~)?$/';
 
@@ -140,7 +150,23 @@ final class RequestParser implements ParserContract
                 continue;
             }
 
-            $filter = $this->parseParam((string) $rawKey, (string) $rawValue);
+            $rawKeyStr   = (string) $rawKey;
+            $rawValueStr = (string) $rawValue;
+
+            // Detect dot-notation: route to relation filter parser
+            // A key is relational if it contains a dot anywhere in it,
+            // OR if its value is an existence keyword (has, doesntHave, orHas, doesntHave)
+            if ($this->isRelationKey($rawKeyStr, $rawValueStr)) {
+                $filter = $this->parseRelationParam($rawKeyStr, $rawValueStr);
+
+                if ($filter !== null) {
+                    $collection = $collection->withRelationFilter($filter);
+                }
+
+                continue;
+            }
+
+            $filter = $this->parseParam($rawKeyStr, $rawValueStr);
 
             if ($filter !== null) {
                 $collection = $collection->withFilter($filter);
@@ -148,6 +174,111 @@ final class RequestParser implements ParserContract
         }
 
         return $collection;
+    }
+
+    /**
+     * Determine whether this param should be treated as a relation filter.
+     * A param is relational when:
+     *   - The (stripped) key contains a dot  (e.g. posts.status, company.address.city)
+     *   - The value is a bare existence keyword with no dot (e.g. ?posts=has)
+     */
+    private function isRelationKey(string $rawKey, string $rawValue): bool
+    {
+        // Strip any inline operator suffix to get the bare key
+        $bareKey = rtrim($rawKey, '>=<!~');
+
+        if (str_contains($bareKey, '.')) {
+            return true;
+        }
+
+        // Existence checks: ?posts=has, ?posts=doesntHave, ?posts=orHas
+        if (in_array(strtolower($rawValue), ['has', 'doesnt_have', 'doesnthave', 'orhas', 'or_has'], true)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Parse a relation filter param into a RelationFilterInput.
+     *
+     * Examples:
+     *   posts.status=published   → ['posts'], 'status', 'eq', 'published'
+     *   posts.title~laravel      → ['posts'], 'title', 'like', 'laravel'
+     *   company.address.city=NYC → ['company', 'address'], 'city', 'eq', 'NYC'
+     *   posts=has                → ['posts'], null, 'has', null
+     *   posts=doesntHave         → ['posts'], null, 'doesnt_have', null
+     */
+    private function parseRelationParam(string $rawKey, string $rawValue): ?RelationFilterInput
+    {
+        // Check for existence operators first (key has no dot)
+        $lowerValue = strtolower($rawValue);
+
+        if (in_array($lowerValue, ['has', 'doesnt_have', 'doesnthave'], true)) {
+            $op = ($lowerValue === 'has') ? 'has' : 'doesnt_have';
+
+            return new RelationFilterInput(
+                relation: [$this->sanitiseString($rawKey)],
+                field: null,
+                operator: $op,
+                value: null,
+            );
+        }
+
+        if (in_array($lowerValue, ['orhas', 'or_has'], true)) {
+            return new RelationFilterInput(
+                relation: [$this->sanitiseString($rawKey)],
+                field: null,
+                operator: 'or_has',
+                value: null,
+            );
+        }
+
+        // Dot-notation: extract inline operator from the key suffix
+        if (! preg_match(self::KEY_OPERATOR_PATTERN, $rawKey, $keyMatches)) {
+            return null;
+        }
+
+        $fullField = $keyMatches['field']; // e.g. "posts.status" or "company.address.city"
+        $inlineOp  = $keyMatches['op'] ?? '';
+
+        $segments = explode('.', $fullField);
+
+        if (count($segments) < 2) {
+            return null;
+        }
+
+        // Last segment = leaf field, everything before = relation chain
+        $field    = array_pop($segments);
+        $relation = $segments;
+
+        $sanitisedValue = $this->sanitiseString($rawValue);
+
+        // Inline operator (e.g. posts.price>=100)
+        if ($inlineOp !== '') {
+            $operator = self::INLINE_OPERATOR_MAP[$inlineOp] ?? null;
+
+            if ($operator === null) {
+                return null;
+            }
+
+            return new RelationFilterInput(
+                relation: $relation,
+                field: $field,
+                operator: $operator->value,
+                value: $sanitisedValue,
+            );
+        }
+
+        // Value-level operator (same logic as flat filters)
+        $flatInput = $this->resolveValueOperator($field, $sanitisedValue);
+
+        return new RelationFilterInput(
+            relation: $relation,
+            field: $flatInput->field,
+            operator: $flatInput->operator,
+            value: $flatInput->value,
+        );
     }
 
     private function parseParam(string $rawKey, string $rawValue): ?FilterInput
