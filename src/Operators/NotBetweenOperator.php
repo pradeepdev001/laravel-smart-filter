@@ -1,0 +1,30 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Pradeepdev\SmartFilter\Operators;
+
+use Illuminate\Database\Eloquent\Builder;
+use Pradeepdev\SmartFilter\Contracts\OperatorContract;
+use Pradeepdev\SmartFilter\DTOs\FilterInput;
+use Pradeepdev\SmartFilter\Enums\Operator;
+use Pradeepdev\SmartFilter\Exceptions\InvalidFilterValueException;
+
+final class NotBetweenOperator implements OperatorContract
+{
+    public function apply(Builder $builder, FilterInput $input): Builder
+    {
+        $values = is_array($input->value) ? $input->value : [$input->value];
+
+        if (count($values) !== 2) {
+            throw InvalidFilterValueException::betweenRequiresTwoValues($input->field);
+        }
+
+        return $builder->whereNotBetween($input->field, [$values[0], $values[1]]);
+    }
+
+    public function handles(): array
+    {
+        return [Operator::NotBetween->value];
+    }
+}

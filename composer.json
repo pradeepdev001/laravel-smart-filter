@@ -1,0 +1,72 @@
+{
+    "name": "pradeepdev001/laravel-smart-filter",
+    "description": "A powerful, elegant, and extensible Eloquent filtering package for Laravel 11 & 12.",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "laravel",
+        "filter",
+        "eloquent",
+        "query",
+        "smart-filter",
+        "api-filter",
+        "request-filter"
+    ],
+    "authors": [
+        {
+            "name": "Pradeepdev",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "illuminate/contracts": "^11.0 || ^12.0",
+        "illuminate/database": "^11.0 || ^12.0",
+        "illuminate/http": "^11.0 || ^12.0",
+        "illuminate/support": "^11.0 || ^12.0",
+        "illuminate/pipeline": "^11.0 || ^12.0"
+    },
+    "require-dev": {
+        "laravel/framework": "^11.0 || ^12.0",
+        "orchestra/testbench": "^9.0 || ^10.0",
+        "pestphp/pest": "^3.0",
+        "pestphp/pest-plugin-laravel": "^3.0",
+        "phpstan/phpstan": "^2.0",
+        "nunomaduro/larastan": "^3.0",
+        "laravel/pint": "^1.18"
+    },
+    "autoload": {
+        "psr-4": {
+            "Pradeepdev\\SmartFilter\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Pradeepdev\\SmartFilter\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Pradeepdev\\SmartFilter\\SmartFilterServiceProvider"
+            ],
+            "aliases": {
+                "SmartFilter": "Pradeepdev\\SmartFilter\\Facades\\SmartFilter"
+            }
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/pest",
+        "test:coverage": "vendor/bin/pest --coverage",
+        "analyse": "vendor/bin/phpstan analyse",
+        "format": "vendor/bin/pint"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
