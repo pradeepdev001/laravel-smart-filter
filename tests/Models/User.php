@@ -28,6 +28,7 @@ class User extends Model
         'company_id',
     ];
 
+    /** @var list<string> */
     protected array $filterable = [
         'name',
         'email',
@@ -41,20 +42,25 @@ class User extends Model
         'company_id',
     ];
 
+    /** @var list<string> */
     protected array $searchable = ['name', 'email'];
 
+    /** @var array<string, string> */
     protected array $filterAliases = ['active' => 'is_active'];
 
+    /** @return HasMany<Post, $this> */
     public function posts(): HasMany
     {
         return $this->hasMany(Post::class);
     }
 
+    /** @return BelongsTo<Company, $this> */
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
     }
 
+    /** @return BelongsToMany<Role, $this> */
     public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class, 'role_user');

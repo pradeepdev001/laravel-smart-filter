@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Pradeepdev\SmartFilter\Contracts\OperatorRegistryContract;
 use Pradeepdev\SmartFilter\DTOs\FilterInput;
 use Pradeepdev\SmartFilter\DTOs\RelationFilterInput;
-use Pradeepdev\SmartFilter\Support\FieldGuard;
 
 /**
  * Applies relation filter inputs to an Eloquent query builder.
@@ -28,11 +27,14 @@ final class RelationFilterApplier
 {
     public function __construct(
         private readonly OperatorRegistryContract $registry,
-        private readonly FieldGuard $guard,
     ) {}
 
     /**
      * Apply a single RelationFilterInput to the builder.
+     *
+     * @template TModel of \Illuminate\Database\Eloquent\Model
+     * @param  Builder<TModel>  $builder
+     * @return Builder<TModel>
      */
     public function apply(Builder $builder, RelationFilterInput $input): Builder
     {
@@ -46,6 +48,11 @@ final class RelationFilterApplier
 
     // -------------------------------------------------------------------------
 
+    /**
+     * @template TModel of \Illuminate\Database\Eloquent\Model
+     * @param  Builder<TModel>  $builder
+     * @return Builder<TModel>
+     */
     private function applyWhereHas(Builder $builder, RelationFilterInput $input): Builder
     {
         $rootRelation = $input->rootRelation();
@@ -64,6 +71,10 @@ final class RelationFilterApplier
         });
     }
 
+    /**
+     * @template TModel of \Illuminate\Database\Eloquent\Model
+     * @param  Builder<TModel>  $builder
+     */
     private function applyLeafFilter(Builder $builder, RelationFilterInput $input): void
     {
         if ($input->field === null) {

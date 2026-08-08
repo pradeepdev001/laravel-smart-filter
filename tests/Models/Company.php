@@ -16,8 +16,10 @@ class Company extends Model
 
     protected $fillable = ['name', 'city'];
 
+    /** @var list<string> */
     protected array $filterable = ['name', 'city'];
 
+    /** @return HasMany<User, $this> */
     public function users(): HasMany
     {
         return $this->hasMany(User::class);

@@ -8,6 +8,9 @@ use InvalidArgumentException;
 
 final class InvalidFilterFieldException extends InvalidArgumentException
 {
+    /**
+     * @param  list<string>  $allowed
+     */
     public static function fieldNotAllowed(string $field, array $allowed): self
     {
         $list = implode(', ', $allowed);

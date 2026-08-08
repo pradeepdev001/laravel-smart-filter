@@ -30,6 +30,10 @@ final class FilterBuilder
 
     /**
      * Apply all filters, sorts, and search from the collection to the builder.
+     *
+     * @template TModel of \Illuminate\Database\Eloquent\Model
+     * @param  Builder<TModel>  $builder
+     * @return Builder<TModel>
      */
     public function apply(Builder $builder, FilterCollection $collection): Builder
     {
@@ -43,6 +47,11 @@ final class FilterBuilder
 
     // -------------------------------------------------------------------------
 
+    /**
+     * @template TModel of \Illuminate\Database\Eloquent\Model
+     * @param  Builder<TModel>  $builder
+     * @return Builder<TModel>
+     */
     private function applyFilters(Builder $builder, FilterCollection $collection): Builder
     {
         foreach ($collection->filters() as $filter) {
@@ -59,6 +68,11 @@ final class FilterBuilder
         return $builder;
     }
 
+    /**
+     * @template TModel of \Illuminate\Database\Eloquent\Model
+     * @param  Builder<TModel>  $builder
+     * @return Builder<TModel>
+     */
     private function applyRelationFilters(Builder $builder, FilterCollection $collection): Builder
     {
         if (! $collection->hasRelationFilters()) {
@@ -68,7 +82,7 @@ final class FilterBuilder
         // The relation applier uses a permissive guard (no field restrictions)
         // because field-level restrictions on related models are enforced inside
         // RelationFilterApplier using the relation's own model guard.
-        $applier = new RelationFilterApplier($this->registry, $this->guard);
+        $applier = new RelationFilterApplier($this->registry);
 
         foreach ($collection->relationFilters() as $relationFilter) {
             $builder = $applier->apply($builder, $relationFilter);
@@ -77,6 +91,11 @@ final class FilterBuilder
         return $builder;
     }
 
+    /**
+     * @template TModel of \Illuminate\Database\Eloquent\Model
+     * @param  Builder<TModel>  $builder
+     * @return Builder<TModel>
+     */
     private function applySorts(Builder $builder, FilterCollection $collection): Builder
     {
         foreach ($collection->sorts() as $sort) {
@@ -92,6 +111,11 @@ final class FilterBuilder
         return $builder;
     }
 
+    /**
+     * @template TModel of \Illuminate\Database\Eloquent\Model
+     * @param  Builder<TModel>  $builder
+     * @return Builder<TModel>
+     */
     private function applySearch(Builder $builder, FilterCollection $collection): Builder
     {
         $search = $collection->search();

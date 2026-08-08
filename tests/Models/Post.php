@@ -16,10 +16,13 @@ class Post extends Model
 
     protected $fillable = ['user_id', 'title', 'body', 'status'];
 
+    /** @var list<string> */
     protected array $filterable = ['title', 'status', 'user_id'];
 
+    /** @var list<string> */
     protected array $searchable = ['title', 'body'];
 
+    /** @return BelongsTo<User, $this> */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

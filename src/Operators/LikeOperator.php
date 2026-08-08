@@ -11,6 +11,11 @@ use Pradeepdev\SmartFilter\Enums\Operator;
 
 final class LikeOperator implements OperatorContract
 {
+    /**
+     * @template TModel of \Illuminate\Database\Eloquent\Model
+     * @param  Builder<TModel>  $builder
+     * @return Builder<TModel>
+     */
     public function apply(Builder $builder, FilterInput $input): Builder
     {
         // Wrap value in % wildcards. The value is already sanitised by the parser.

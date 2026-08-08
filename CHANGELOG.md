@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Expanded package support to Laravel 8, 9, 10, 11, and 12.
+- Widened the CI matrix to exercise framework-specific Laravel, Testbench, and Pest combinations.
+- Fixed PHPStan configuration so `composer analyse` runs on supported PHPStan versions.
+
 ## [1.1.0] — 2024-01-02
 
 ### Added

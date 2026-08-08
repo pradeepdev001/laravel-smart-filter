@@ -12,6 +12,11 @@ use Pradeepdev\SmartFilter\Exceptions\InvalidFilterValueException;
 
 final class NotBetweenOperator implements OperatorContract
 {
+    /**
+     * @template TModel of \Illuminate\Database\Eloquent\Model
+     * @param  Builder<TModel>  $builder
+     * @return Builder<TModel>
+     */
     public function apply(Builder $builder, FilterInput $input): Builder
     {
         $values = is_array($input->value) ? $input->value : [$input->value];

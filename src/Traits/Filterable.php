@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Pradeepdev\SmartFilter\Traits;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Pradeepdev\SmartFilter\Builders\FilterBuilder;
 use Pradeepdev\SmartFilter\Contracts\OperatorRegistryContract;
@@ -13,6 +14,8 @@ use Pradeepdev\SmartFilter\Support\OperatorRegistry;
 
 /**
  * Add this trait to any Eloquent model to enable SmartFilter.
+ *
+ * @mixin Model
  *
  * Usage:
  *   User::smartFilter()->paginate();
@@ -43,19 +46,37 @@ trait Filterable
     /**
      * Local Eloquent scope — the primary entry point.
      *
-     * @param  Builder       $query
+     * @template TModel of Model
+     * @param  Builder<TModel>  $query
      * @param  Request|null  $request  Inject a custom Request for testing.
+     * @return Builder<TModel>
      */
     public function scopeSmartFilter(Builder $query, ?Request $request = null): Builder
     {
         $request = $request ?? app(Request::class);
+        /** @var array<string, mixed> $properties */
+        $properties = get_object_vars($this);
 
         // Read configuration from model properties (if declared) or fall back to defaults.
-        $filterable   = property_exists($this, 'filterable')   ? $this->filterable   : [];
-        $filterIgnore = property_exists($this, 'filterIgnore') ? $this->filterIgnore : [];
-        $filterAliases= property_exists($this, 'filterAliases')? $this->filterAliases: [];
-        $searchable   = property_exists($this, 'searchable')   ? $this->searchable   : [];
-        $filterStrict = property_exists($this, 'filterStrict') ? $this->filterStrict : false;
+        /** @var list<string> $filterable */
+        $filterable = isset($properties['filterable']) && is_array($properties['filterable'])
+            ? array_values($properties['filterable'])
+            : [];
+        /** @var list<string> $filterIgnore */
+        $filterIgnore = isset($properties['filterIgnore']) && is_array($properties['filterIgnore'])
+            ? array_values($properties['filterIgnore'])
+            : [];
+        /** @var array<string, string> $filterAliases */
+        $filterAliases = isset($properties['filterAliases']) && is_array($properties['filterAliases'])
+            ? $properties['filterAliases']
+            : [];
+        /** @var list<string> $searchable */
+        $searchable = isset($properties['searchable']) && is_array($properties['searchable'])
+            ? array_values($properties['searchable'])
+            : [];
+        $filterStrict = isset($properties['filterStrict']) && is_bool($properties['filterStrict'])
+            ? $properties['filterStrict']
+            : false;
 
         // Always build the parser with model-level configuration so that
         // $searchable and $filterIgnore from the model are respected.

@@ -15,6 +15,11 @@ final class BooleanOperator implements OperatorContract
     private const TRUTHY = ['true', '1'];
     private const FALSY  = ['false', '0'];
 
+    /**
+     * @template TModel of \Illuminate\Database\Eloquent\Model
+     * @param  Builder<TModel>  $builder
+     * @return Builder<TModel>
+     */
     public function apply(Builder $builder, FilterInput $input): Builder
     {
         $raw = strtolower((string) $input->value);

@@ -11,6 +11,11 @@ use Pradeepdev\SmartFilter\Enums\Operator;
 
 final class EqualsOperator implements OperatorContract
 {
+    /**
+     * @template TModel of \Illuminate\Database\Eloquent\Model
+     * @param  Builder<TModel>  $builder
+     * @return Builder<TModel>
+     */
     public function apply(Builder $builder, FilterInput $input): Builder
     {
         return $builder->where($input->field, '=', $input->value);

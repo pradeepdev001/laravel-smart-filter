@@ -6,6 +6,7 @@ namespace Pradeepdev\SmartFilter;
 
 use Illuminate\Support\ServiceProvider;
 use Pradeepdev\SmartFilter\Builders\FilterBuilder;
+use Pradeepdev\SmartFilter\Contracts\OperatorContract;
 use Pradeepdev\SmartFilter\Contracts\OperatorRegistryContract;
 use Pradeepdev\SmartFilter\Contracts\ParserContract;
 use Pradeepdev\SmartFilter\Operators\BetweenOperator;
@@ -42,7 +43,9 @@ final class SmartFilterServiceProvider extends ServiceProvider
             $extra = config('smart-filter.operators', []);
 
             foreach ($extra as $operatorClass) {
-                $registry->register(new $operatorClass());
+                /** @var OperatorContract $operator */
+                $operator = new $operatorClass();
+                $registry->register($operator);
             }
 
             return $registry;
@@ -51,11 +54,11 @@ final class SmartFilterServiceProvider extends ServiceProvider
         // Bind the parser — consumers can swap this to support different
         // input formats (JSON body, GraphQL variables, etc.)
         $this->app->singleton(ParserContract::class, function (): RequestParser {
-            /** @var array<string> $ignored */
-            $ignored = config('smart-filter.ignored_fields', []);
+            /** @var list<string> $ignored */
+            $ignored = array_values(config('smart-filter.ignored_fields', []));
 
-            /** @var array<string> $searchable */
-            $searchable = config('smart-filter.searchable_fields', []);
+            /** @var list<string> $searchable */
+            $searchable = array_values(config('smart-filter.searchable_fields', []));
 
             return new RequestParser(
                 ignoredFields: $ignored,

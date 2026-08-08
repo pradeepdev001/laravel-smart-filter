@@ -5,5 +5,5 @@ parameters:
     level: 8
     paths:
         - src
-    checkMissingIterableValueType: false
+        - tests/Models
     ignoreErrors: []

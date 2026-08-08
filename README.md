@@ -3,10 +3,10 @@
 [![Tests](https://github.com/pradeepdev001/laravel-smart-filter/actions/workflows/tests.yml/badge.svg)](https://github.com/pradeepdev001/laravel-smart-filter/actions)
 [![PHPStan](https://github.com/pradeepdev001/laravel-smart-filter/actions/workflows/static-analysis.yml/badge.svg)](https://github.com/pradeepdev001/laravel-smart-filter/actions)
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/pradeepdev001/laravel-smart-filter.svg)](https://packagist.org/packages/pradeepdev001/laravel-smart-filter)
-[![PHP Version](https://img.shields.io/badge/php-%5E8.2-blue)](https://packagist.org/packages/pradeepdev001/laravel-smart-filter)
+[![PHP Version](https://img.shields.io/badge/php-%5E8.1-blue)](https://packagist.org/packages/pradeepdev001/laravel-smart-filter)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-A powerful, elegant, and extensible Eloquent filtering package for Laravel 10, 11 & 12.
+A powerful, elegant, and extensible Eloquent filtering package for Laravel 8, 9, 10, 11 & 12.
 
 Stop writing repetitive `when()` chains. Let your URL do the talking.
 
@@ -28,8 +28,8 @@ User::smartFilter()->paginate();
 
 ## Requirements
 
-- PHP 8.2+
-- Laravel 10, 11, or 12
+- PHP 8.1+
+- Laravel 8, 9, 10, 11, or 12
 
 ---
 

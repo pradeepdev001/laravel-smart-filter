@@ -13,12 +13,67 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['8.2', '8.3', '8.4']
-        laravel: ['10.*', '11.*', '12.*']
-        stability: [prefer-stable]
-        exclude:
-          # Laravel 10 requires PHP ^8.1 but our package requires ^8.2 — all combos valid.
-          # Laravel 12 dropped official PHP 8.1 support — no exclusions needed here.
+        include:
+          - php: '8.1'
+            laravel: '8.*'
+            testbench: '^6.47'
+            pest: '^1.22.1'
+            pest_plugin: '^1.4.0'
+            stability: prefer-lowest
+          - php: '8.1'
+            laravel: '8.*'
+            testbench: '^6.47'
+            pest: '^1.22.1'
+            pest_plugin: '^1.4.0'
+            stability: prefer-stable
+          - php: '8.1'
+            laravel: '9.*'
+            testbench: '^7.56'
+            pest: '^1.22.1'
+            pest_plugin: '^1.4.0'
+            stability: prefer-lowest
+          - php: '8.1'
+            laravel: '9.*'
+            testbench: '^7.56'
+            pest: '^1.22.1'
+            pest_plugin: '^1.4.0'
+            stability: prefer-stable
+          - php: '8.1'
+            laravel: '10.*'
+            testbench: '^8.37'
+            pest: '^2.36.0'
+            pest_plugin: '^2.4.0'
+            stability: prefer-lowest
+          - php: '8.3'
+            laravel: '10.*'
+            testbench: '^8.37'
+            pest: '^2.36.0'
+            pest_plugin: '^2.4.0'
+            stability: prefer-stable
+          - php: '8.2'
+            laravel: '11.*'
+            testbench: '^9.17'
+            pest: '^2.36.0'
+            pest_plugin: '^2.4.0'
+            stability: prefer-lowest
+          - php: '8.4'
+            laravel: '11.*'
+            testbench: '^9.17'
+            pest: '^2.36.0'
+            pest_plugin: '^2.4.0'
+            stability: prefer-stable
+          - php: '8.2'
+            laravel: '12.*'
+            testbench: '^10.11'
+            pest: '^3.8.2'
+            pest_plugin: '^3.2.0'
+            stability: prefer-lowest
+          - php: '8.4'
+            laravel: '12.*'
+            testbench: '^10.11'
+            pest: '^3.8.2'
+            pest_plugin: '^3.2.0'
+            stability: prefer-stable
 
     name: PHP ${{ matrix.php }} — Laravel ${{ matrix.laravel }}
 
@@ -33,22 +88,13 @@ jobs:
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite
           coverage: xdebug
 
-      - name: Resolve Testbench version for Laravel ${{ matrix.laravel }}
-        id: testbench
-        run: |
-          if [[ "${{ matrix.laravel }}" == "10.*" ]]; then
-            echo "version=^8.0" >> $GITHUB_OUTPUT
-          elif [[ "${{ matrix.laravel }}" == "11.*" ]]; then
-            echo "version=^9.0" >> $GITHUB_OUTPUT
-          else
-            echo "version=^10.0" >> $GITHUB_OUTPUT
-          fi
-
       - name: Install dependencies
         run: |
           composer require \
             "laravel/framework:${{ matrix.laravel }}" \
-            "orchestra/testbench:${{ steps.testbench.outputs.version }}" \
+            "orchestra/testbench:${{ matrix.testbench }}" \
+            "pestphp/pest:${{ matrix.pest }}" \
+            "pestphp/pest-plugin-laravel:${{ matrix.pest_plugin }}" \
             --no-interaction --no-update
           composer update --${{ matrix.stability }} --prefer-dist --no-interaction
 
@@ -56,5 +102,5 @@ jobs:
         run: vendor/bin/pest --ci
 
       - name: Run tests with coverage
-        if: matrix.php == '8.3' && matrix.laravel == '11.*'
+        if: matrix.php == '8.4' && matrix.laravel == '12.*' && matrix.stability == 'prefer-stable'
         run: vendor/bin/pest --coverage --min=80

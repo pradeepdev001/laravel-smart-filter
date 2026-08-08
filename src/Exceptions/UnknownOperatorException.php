@@ -8,6 +8,9 @@ use InvalidArgumentException;
 
 final class UnknownOperatorException extends InvalidArgumentException
 {
+    /**
+     * @param  list<string>  $available
+     */
     public static function for(string $operator, array $available): self
     {
         $list = implode(', ', $available);

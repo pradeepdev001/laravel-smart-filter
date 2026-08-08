@@ -256,11 +256,7 @@ final class RequestParser implements ParserContract
 
         // Inline operator (e.g. posts.price>=100)
         if ($inlineOp !== '') {
-            $operator = self::INLINE_OPERATOR_MAP[$inlineOp] ?? null;
-
-            if ($operator === null) {
-                return null;
-            }
+            $operator = self::INLINE_OPERATOR_MAP[$inlineOp];
 
             return new RelationFilterInput(
                 relation: $relation,
@@ -294,11 +290,7 @@ final class RequestParser implements ParserContract
 
         // Inline operator takes precedence (e.g. ?age>=25)
         if ($inlineOp !== '') {
-            $operator = self::INLINE_OPERATOR_MAP[$inlineOp] ?? null;
-
-            if ($operator === null) {
-                return null;
-            }
+            $operator = self::INLINE_OPERATOR_MAP[$inlineOp];
 
             return new FilterInput($field, $operator->value, $sanitised);
         }
