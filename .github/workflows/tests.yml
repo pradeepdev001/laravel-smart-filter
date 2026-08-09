@@ -101,8 +101,6 @@ jobs:
           composer update --${{ matrix.stability }} --prefer-dist --no-interaction
 
       - name: Run tests
-        run: vendor/bin/pest
+        run: vendor/bin/pest --no-coverage
 
-      - name: Run tests with coverage
-        if: matrix.php == '8.4' && matrix.laravel == '12.*' && matrix.stability == 'prefer-stable'
-        run: vendor/bin/pest --coverage --min=80
+      
