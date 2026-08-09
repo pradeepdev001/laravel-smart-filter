@@ -14,7 +14,7 @@ beforeEach(function (): void {
 
 it('applies multiple filters together with AND logic', function (): void {
     $request = Request::create('/users', 'GET', [
-        'status'  => 'active',
+        'status' => 'active',
         'country' => 'india',
     ]);
 
@@ -27,7 +27,7 @@ it('applies multiple filters together with AND logic', function (): void {
 it('combines comparison and equals filters', function (): void {
     $request = Request::create('/users', 'GET', [
         'status' => 'active',
-        'age>='  => '30',
+        'age>=' => '30',
     ]);
 
     $results = User::smartFilter($request)->get();
@@ -39,7 +39,7 @@ it('combines comparison and equals filters', function (): void {
 it('combines IN and comparison filters', function (): void {
     $request = Request::create('/users', 'GET', [
         'country' => 'in(india,usa)',
-        'age>='   => '30',
+        'age>=' => '30',
     ]);
 
     $results = User::smartFilter($request)->get();
@@ -51,7 +51,7 @@ it('combines IN and comparison filters', function (): void {
 it('combines filters and sort together', function (): void {
     $request = Request::create('/users', 'GET', [
         'status' => 'active',
-        'sort'   => 'age',
+        'sort' => 'age',
     ]);
 
     $results = User::smartFilter($request)->get();

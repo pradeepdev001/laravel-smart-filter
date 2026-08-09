@@ -14,7 +14,7 @@ use Pradeepdev\SmartFilter\Tests\Models\User;
 
 it('filters users who have posts with a specific status', function (): void {
     $alice = User::create(['name' => 'Alice', 'email' => 'alice@example.com']);
-    $bob   = User::create(['name' => 'Bob',   'email' => 'bob@example.com']);
+    $bob = User::create(['name' => 'Bob',   'email' => 'bob@example.com']);
 
     Post::create(['user_id' => $alice->id, 'title' => 'Post A', 'status' => 'published']);
     Post::create(['user_id' => $bob->id,   'title' => 'Post B', 'status' => 'draft']);
@@ -28,7 +28,7 @@ it('filters users who have posts with a specific status', function (): void {
 
 it('filters users who have posts with LIKE on title', function (): void {
     $alice = User::create(['name' => 'Alice', 'email' => 'alice@example.com']);
-    $bob   = User::create(['name' => 'Bob',   'email' => 'bob@example.com']);
+    $bob = User::create(['name' => 'Bob',   'email' => 'bob@example.com']);
 
     Post::create(['user_id' => $alice->id, 'title' => 'Laravel Tips',   'status' => 'published']);
     Post::create(['user_id' => $bob->id,   'title' => 'PHP Basics',     'status' => 'published']);
@@ -42,7 +42,7 @@ it('filters users who have posts with LIKE on title', function (): void {
 
 it('filters users who have posts with NOT EQUALS on status', function (): void {
     $alice = User::create(['name' => 'Alice', 'email' => 'alice@example.com']);
-    $bob   = User::create(['name' => 'Bob',   'email' => 'bob@example.com']);
+    $bob = User::create(['name' => 'Bob',   'email' => 'bob@example.com']);
 
     Post::create(['user_id' => $alice->id, 'title' => 'Post A', 'status' => 'published']);
     Post::create(['user_id' => $bob->id,   'title' => 'Post B', 'status' => 'draft']);
@@ -56,7 +56,7 @@ it('filters users who have posts with NOT EQUALS on status', function (): void {
 
 it('filters users who have posts with IN operator on status', function (): void {
     $alice = User::create(['name' => 'Alice', 'email' => 'alice@example.com']);
-    $bob   = User::create(['name' => 'Bob',   'email' => 'bob@example.com']);
+    $bob = User::create(['name' => 'Bob',   'email' => 'bob@example.com']);
     $carol = User::create(['name' => 'Carol', 'email' => 'carol@example.com']);
 
     Post::create(['user_id' => $alice->id, 'title' => 'A', 'status' => 'published']);
@@ -76,7 +76,7 @@ it('filters users who have posts with IN operator on status', function (): void 
 
 it('filters users who have at least one post using has', function (): void {
     $alice = User::create(['name' => 'Alice', 'email' => 'alice@example.com']);
-    $bob   = User::create(['name' => 'Bob',   'email' => 'bob@example.com']);
+    $bob = User::create(['name' => 'Bob',   'email' => 'bob@example.com']);
 
     Post::create(['user_id' => $alice->id, 'title' => 'Post A', 'status' => 'published']);
     // Bob has no posts
@@ -90,7 +90,7 @@ it('filters users who have at least one post using has', function (): void {
 
 it('filters users who have no posts using doesntHave', function (): void {
     $alice = User::create(['name' => 'Alice', 'email' => 'alice@example.com']);
-    $bob   = User::create(['name' => 'Bob',   'email' => 'bob@example.com']);
+    $bob = User::create(['name' => 'Bob',   'email' => 'bob@example.com']);
 
     Post::create(['user_id' => $alice->id, 'title' => 'Post A', 'status' => 'published']);
 
@@ -107,9 +107,9 @@ it('filters users who have no posts using doesntHave', function (): void {
 
 it('filters users who have a specific role', function (): void {
     $alice = User::create(['name' => 'Alice', 'email' => 'alice@example.com']);
-    $bob   = User::create(['name' => 'Bob',   'email' => 'bob@example.com']);
+    $bob = User::create(['name' => 'Bob',   'email' => 'bob@example.com']);
 
-    $admin  = Role::create(['name' => 'admin']);
+    $admin = Role::create(['name' => 'admin']);
     $editor = Role::create(['name' => 'editor']);
 
     $alice->roles()->attach($admin->id);
@@ -124,12 +124,12 @@ it('filters users who have a specific role', function (): void {
 
 it('filters users with roles using IN operator', function (): void {
     $alice = User::create(['name' => 'Alice', 'email' => 'alice@example.com']);
-    $bob   = User::create(['name' => 'Bob',   'email' => 'bob@example.com']);
+    $bob = User::create(['name' => 'Bob',   'email' => 'bob@example.com']);
     $carol = User::create(['name' => 'Carol', 'email' => 'carol@example.com']);
 
-    $admin    = Role::create(['name' => 'admin']);
-    $editor   = Role::create(['name' => 'editor']);
-    $viewer   = Role::create(['name' => 'viewer']);
+    $admin = Role::create(['name' => 'admin']);
+    $editor = Role::create(['name' => 'editor']);
+    $viewer = Role::create(['name' => 'viewer']);
 
     $alice->roles()->attach($admin->id);
     $bob->roles()->attach($editor->id);
@@ -147,11 +147,11 @@ it('filters users with roles using IN operator', function (): void {
 // ---------------------------------------------------------------------------
 
 it('filters users by their company name (nested BelongsTo)', function (): void {
-    $acme  = Company::create(['name' => 'Acme Corp', 'city' => 'New York']);
+    $acme = Company::create(['name' => 'Acme Corp', 'city' => 'New York']);
     $globo = Company::create(['name' => 'Globo Inc', 'city' => 'London']);
 
     $alice = User::create(['name' => 'Alice', 'email' => 'alice@example.com', 'company_id' => $acme->id]);
-    $bob   = User::create(['name' => 'Bob',   'email' => 'bob@example.com',   'company_id' => $globo->id]);
+    $bob = User::create(['name' => 'Bob',   'email' => 'bob@example.com',   'company_id' => $globo->id]);
 
     $request = Request::create('/users', 'GET', ['company.name' => 'Acme Corp']);
     $results = User::smartFilter($request)->get();
@@ -161,7 +161,7 @@ it('filters users by their company name (nested BelongsTo)', function (): void {
 });
 
 it('filters users by company city using LIKE', function (): void {
-    $acme  = Company::create(['name' => 'Acme Corp', 'city' => 'New York']);
+    $acme = Company::create(['name' => 'Acme Corp', 'city' => 'New York']);
     $globo = Company::create(['name' => 'Globo Inc', 'city' => 'New Delhi']);
     $local = Company::create(['name' => 'Local Ltd', 'city' => 'London']);
 
@@ -182,7 +182,7 @@ it('filters users by company city using LIKE', function (): void {
 
 it('combines relation filter with a flat filter', function (): void {
     $alice = User::create(['name' => 'Alice', 'email' => 'alice@example.com', 'status' => 'active']);
-    $bob   = User::create(['name' => 'Bob',   'email' => 'bob@example.com',   'status' => 'active']);
+    $bob = User::create(['name' => 'Bob',   'email' => 'bob@example.com',   'status' => 'active']);
     $carol = User::create(['name' => 'Carol', 'email' => 'carol@example.com', 'status' => 'inactive']);
 
     Post::create(['user_id' => $alice->id, 'title' => 'Post A', 'status' => 'published']);
@@ -190,8 +190,8 @@ it('combines relation filter with a flat filter', function (): void {
     // Carol has no posts
 
     $request = Request::create('/users', 'GET', [
-        'status'        => 'active',
-        'posts.status'  => 'published',
+        'status' => 'active',
+        'posts.status' => 'published',
     ]);
     $results = User::smartFilter($request)->get();
 
@@ -201,7 +201,7 @@ it('combines relation filter with a flat filter', function (): void {
 
 it('combines has check with flat filter', function (): void {
     $alice = User::create(['name' => 'Alice', 'email' => 'alice@example.com', 'status' => 'active']);
-    $bob   = User::create(['name' => 'Bob',   'email' => 'bob@example.com',   'status' => 'active']);
+    $bob = User::create(['name' => 'Bob',   'email' => 'bob@example.com',   'status' => 'active']);
     $carol = User::create(['name' => 'Carol', 'email' => 'carol@example.com', 'status' => 'inactive']);
 
     Post::create(['user_id' => $alice->id, 'title' => 'Post A', 'status' => 'published']);
@@ -209,7 +209,7 @@ it('combines has check with flat filter', function (): void {
 
     $request = Request::create('/users', 'GET', [
         'status' => 'active',
-        'posts'  => 'has',
+        'posts' => 'has',
     ]);
     $results = User::smartFilter($request)->get();
 

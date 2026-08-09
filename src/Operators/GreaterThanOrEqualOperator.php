@@ -13,6 +13,7 @@ final class GreaterThanOrEqualOperator implements OperatorContract
 {
     /**
      * @template TModel of \Illuminate\Database\Eloquent\Model
+     *
      * @param  Builder<TModel>  $builder
      * @return Builder<TModel>
      */

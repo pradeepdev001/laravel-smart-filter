@@ -13,29 +13,29 @@ namespace Pradeepdev\SmartFilter\Enums;
 enum Operator: string
 {
     // Equality
-    case Equals        = 'eq';
-    case NotEquals     = 'neq';
+    case Equals = 'eq';
+    case NotEquals = 'neq';
 
     // Comparison
-    case GreaterThan        = 'gt';
+    case GreaterThan = 'gt';
     case GreaterThanOrEqual = 'gte';
-    case LessThan           = 'lt';
-    case LessThanOrEqual    = 'lte';
+    case LessThan = 'lt';
+    case LessThanOrEqual = 'lte';
 
     // String matching
-    case Like        = 'like';
-    case NotLike     = 'not_like';
+    case Like = 'like';
+    case NotLike = 'not_like';
 
     // Set membership
-    case In    = 'in';
+    case In = 'in';
     case NotIn = 'not_in';
 
     // Range
-    case Between    = 'between';
+    case Between = 'between';
     case NotBetween = 'not_between';
 
     // Null checks
-    case IsNull    = 'null';
+    case IsNull = 'null';
     case IsNotNull = 'not_null';
 
     // Boolean

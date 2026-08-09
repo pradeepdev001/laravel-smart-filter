@@ -10,8 +10,8 @@ use Pradeepdev\SmartFilter\Exceptions\InvalidFilterFieldException;
 use Pradeepdev\SmartFilter\Support\FieldGuard;
 
 it('allows any field when no allowed list is defined', function (): void {
-    $guard  = new FieldGuard();
-    $input  = new FilterInput('name', Operator::Equals->value, 'Alice');
+    $guard = new FieldGuard;
+    $input = new FilterInput('name', Operator::Equals->value, 'Alice');
 
     expect($guard->resolveFilter($input))->not->toBeNull();
 });
@@ -54,8 +54,8 @@ it('throws in strict mode for an ignored field', function (): void {
 });
 
 it('resolves an alias to the real column', function (): void {
-    $guard    = new FieldGuard(aliases: ['city' => 'address_city']);
-    $input    = new FilterInput('city', Operator::Equals->value, 'London');
+    $guard = new FieldGuard(aliases: ['city' => 'address_city']);
+    $input = new FilterInput('city', Operator::Equals->value, 'London');
     $resolved = $guard->resolveFilter($input);
 
     expect($resolved)->not->toBeNull()
@@ -63,8 +63,8 @@ it('resolves an alias to the real column', function (): void {
 });
 
 it('resolves sort alias', function (): void {
-    $guard    = new FieldGuard(aliases: ['created' => 'created_at']);
-    $input    = new SortInput('created', SortDirection::Asc);
+    $guard = new FieldGuard(aliases: ['created' => 'created_at']);
+    $input = new SortInput('created', SortDirection::Asc);
     $resolved = $guard->resolveSort($input);
 
     expect($resolved)->not->toBeNull()

@@ -7,6 +7,7 @@ namespace Pradeepdev\SmartFilter\Builders;
 use Illuminate\Database\Eloquent\Builder;
 use Pradeepdev\SmartFilter\Collections\FilterCollection;
 use Pradeepdev\SmartFilter\Contracts\OperatorRegistryContract;
+use Pradeepdev\SmartFilter\DTOs\FilterInput;
 use Pradeepdev\SmartFilter\Support\FieldGuard;
 
 /**
@@ -32,6 +33,7 @@ final class FilterBuilder
      * Apply all filters, sorts, and search from the collection to the builder.
      *
      * @template TModel of \Illuminate\Database\Eloquent\Model
+     *
      * @param  Builder<TModel>  $builder
      * @return Builder<TModel>
      */
@@ -49,6 +51,7 @@ final class FilterBuilder
 
     /**
      * @template TModel of \Illuminate\Database\Eloquent\Model
+     *
      * @param  Builder<TModel>  $builder
      * @return Builder<TModel>
      */
@@ -62,7 +65,7 @@ final class FilterBuilder
             }
 
             $operator = $this->registry->resolve($resolved->operator);
-            $builder  = $operator->apply($builder, $resolved);
+            $builder = $operator->apply($builder, $resolved);
         }
 
         return $builder;
@@ -70,6 +73,7 @@ final class FilterBuilder
 
     /**
      * @template TModel of \Illuminate\Database\Eloquent\Model
+     *
      * @param  Builder<TModel>  $builder
      * @return Builder<TModel>
      */
@@ -93,6 +97,7 @@ final class FilterBuilder
 
     /**
      * @template TModel of \Illuminate\Database\Eloquent\Model
+     *
      * @param  Builder<TModel>  $builder
      * @return Builder<TModel>
      */
@@ -113,6 +118,7 @@ final class FilterBuilder
 
     /**
      * @template TModel of \Illuminate\Database\Eloquent\Model
+     *
      * @param  Builder<TModel>  $builder
      * @return Builder<TModel>
      */
@@ -129,11 +135,11 @@ final class FilterBuilder
         $builder->where(function (Builder $query) use ($search): void {
             foreach ($search->fields as $field) {
                 $resolved = $this->guard->resolveFilter(
-                    new \Pradeepdev\SmartFilter\DTOs\FilterInput($field, 'like', $search->term)
+                    new FilterInput($field, 'like', $search->term)
                 );
 
                 if ($resolved !== null) {
-                    $query->orWhere($field, 'LIKE', '%' . $search->term . '%');
+                    $query->orWhere($field, 'LIKE', '%'.$search->term.'%');
                 }
             }
         });

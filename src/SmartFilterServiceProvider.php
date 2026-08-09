@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Pradeepdev\SmartFilter;
 
 use Illuminate\Support\ServiceProvider;
-use Pradeepdev\SmartFilter\Builders\FilterBuilder;
 use Pradeepdev\SmartFilter\Contracts\OperatorContract;
 use Pradeepdev\SmartFilter\Contracts\OperatorRegistryContract;
 use Pradeepdev\SmartFilter\Contracts\ParserContract;
@@ -31,7 +30,7 @@ final class SmartFilterServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->mergeConfigFrom(__DIR__ . '/../config/smart-filter.php', 'smart-filter');
+        $this->mergeConfigFrom(__DIR__.'/../config/smart-filter.php', 'smart-filter');
 
         // Bind the registry as a singleton so custom operators persist for
         // the lifetime of the request / application.
@@ -44,7 +43,7 @@ final class SmartFilterServiceProvider extends ServiceProvider
 
             foreach ($extra as $operatorClass) {
                 /** @var OperatorContract $operator */
-                $operator = new $operatorClass();
+                $operator = new $operatorClass;
                 $registry->register($operator);
             }
 
@@ -80,7 +79,7 @@ final class SmartFilterServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../config/smart-filter.php' => config_path('smart-filter.php'),
+                __DIR__.'/../config/smart-filter.php' => config_path('smart-filter.php'),
             ], 'smart-filter-config');
         }
     }
@@ -93,23 +92,23 @@ final class SmartFilterServiceProvider extends ServiceProvider
      */
     public static function buildDefaultRegistry(): OperatorRegistry
     {
-        $registry = new OperatorRegistry();
+        $registry = new OperatorRegistry;
 
-        $registry->register(new EqualsOperator());
-        $registry->register(new NotEqualsOperator());
-        $registry->register(new GreaterThanOperator());
-        $registry->register(new GreaterThanOrEqualOperator());
-        $registry->register(new LessThanOperator());
-        $registry->register(new LessThanOrEqualOperator());
-        $registry->register(new LikeOperator());
-        $registry->register(new NotLikeOperator());
-        $registry->register(new InOperator());
-        $registry->register(new NotInOperator());
-        $registry->register(new BetweenOperator());
-        $registry->register(new NotBetweenOperator());
-        $registry->register(new IsNullOperator());
-        $registry->register(new IsNotNullOperator());
-        $registry->register(new BooleanOperator());
+        $registry->register(new EqualsOperator);
+        $registry->register(new NotEqualsOperator);
+        $registry->register(new GreaterThanOperator);
+        $registry->register(new GreaterThanOrEqualOperator);
+        $registry->register(new LessThanOperator);
+        $registry->register(new LessThanOrEqualOperator);
+        $registry->register(new LikeOperator);
+        $registry->register(new NotLikeOperator);
+        $registry->register(new InOperator);
+        $registry->register(new NotInOperator);
+        $registry->register(new BetweenOperator);
+        $registry->register(new NotBetweenOperator);
+        $registry->register(new IsNullOperator);
+        $registry->register(new IsNotNullOperator);
+        $registry->register(new BooleanOperator);
 
         return $registry;
     }

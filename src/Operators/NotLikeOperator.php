@@ -13,12 +13,13 @@ final class NotLikeOperator implements OperatorContract
 {
     /**
      * @template TModel of \Illuminate\Database\Eloquent\Model
+     *
      * @param  Builder<TModel>  $builder
      * @return Builder<TModel>
      */
     public function apply(Builder $builder, FilterInput $input): Builder
     {
-        return $builder->where($input->field, 'NOT LIKE', '%' . $input->value . '%');
+        return $builder->where($input->field, 'NOT LIKE', '%'.$input->value.'%');
     }
 
     public function handles(): array

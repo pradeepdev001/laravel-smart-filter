@@ -12,7 +12,7 @@ it('returns the root relation name', function (): void {
 });
 
 it('removes the root relation on withoutRootRelation', function (): void {
-    $input  = new RelationFilterInput(['posts', 'comments'], 'title', Operator::Equals->value, 'hello');
+    $input = new RelationFilterInput(['posts', 'comments'], 'title', Operator::Equals->value, 'hello');
     $nested = $input->withoutRootRelation();
 
     expect($nested->relation)->toBe(['comments'])
@@ -20,8 +20,8 @@ it('removes the root relation on withoutRootRelation', function (): void {
 });
 
 it('identifies an existence check operator', function (): void {
-    $has      = new RelationFilterInput(['posts'], null, 'has', null);
-    $doesnt   = new RelationFilterInput(['posts'], null, 'doesnt_have', null);
+    $has = new RelationFilterInput(['posts'], null, 'has', null);
+    $doesnt = new RelationFilterInput(['posts'], null, 'doesnt_have', null);
     $notExist = new RelationFilterInput(['posts'], 'title', Operator::Equals->value, 'test');
 
     expect($has->isExistenceCheck())->toBeTrue()
@@ -30,7 +30,7 @@ it('identifies an existence check operator', function (): void {
 });
 
 it('is immutable — withoutRootRelation returns a new instance', function (): void {
-    $input  = new RelationFilterInput(['posts'], 'title', Operator::Equals->value, 'hello');
+    $input = new RelationFilterInput(['posts'], 'title', Operator::Equals->value, 'hello');
     $nested = $input->withoutRootRelation();
 
     expect($input)->not->toBe($nested)

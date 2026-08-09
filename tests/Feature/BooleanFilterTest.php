@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Illuminate\Http\Request;
-use Pradeepdev\SmartFilter\Exceptions\InvalidFilterValueException;
 use Pradeepdev\SmartFilter\Tests\Models\User;
 
 beforeEach(function (): void {

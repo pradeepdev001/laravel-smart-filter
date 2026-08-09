@@ -33,7 +33,7 @@ it('search with no matches returns empty', function (): void {
 it('search can combine with other filters', function (): void {
     $request = Request::create('/users', 'GET', [
         'search' => 'john',
-        'name~'  => 'Bob',
+        'name~' => 'Bob',
     ]);
 
     // search gives us 2 results (John Smith, Bob Johnson), then name~ 'Bob' narrows to 1

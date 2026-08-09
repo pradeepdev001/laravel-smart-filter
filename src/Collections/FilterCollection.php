@@ -19,9 +19,9 @@ use Pradeepdev\SmartFilter\DTOs\SortInput;
 final class FilterCollection
 {
     /**
-     * @param  list<FilterInput>         $filters
-     * @param  list<RelationFilterInput> $relationFilters
-     * @param  list<SortInput>           $sorts
+     * @param  list<FilterInput>  $filters
+     * @param  list<RelationFilterInput>  $relationFilters
+     * @param  list<SortInput>  $sorts
      */
     public function __construct(
         private array $filters = [],
@@ -86,7 +86,7 @@ final class FilterCollection
      */
     public function withFilter(FilterInput $filter): self
     {
-        $clone          = clone $this;
+        $clone = clone $this;
         $clone->filters = [...$this->filters, $filter];
 
         return $clone;
@@ -97,7 +97,7 @@ final class FilterCollection
      */
     public function withRelationFilter(RelationFilterInput $filter): self
     {
-        $clone                  = clone $this;
+        $clone = clone $this;
         $clone->relationFilters = [...$this->relationFilters, $filter];
 
         return $clone;
@@ -108,7 +108,7 @@ final class FilterCollection
      */
     public function withSort(SortInput $sort): self
     {
-        $clone        = clone $this;
+        $clone = clone $this;
         $clone->sorts = [...$this->sorts, $sort];
 
         return $clone;
@@ -119,7 +119,7 @@ final class FilterCollection
      */
     public function withSearch(SearchInput $search): self
     {
-        $clone         = clone $this;
+        $clone = clone $this;
         $clone->search = $search;
 
         return $clone;

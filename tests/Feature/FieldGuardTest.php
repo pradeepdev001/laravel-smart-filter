@@ -5,7 +5,6 @@ declare(strict_types=1);
 use Illuminate\Http\Request;
 use Pradeepdev\SmartFilter\Exceptions\InvalidFilterFieldException;
 use Pradeepdev\SmartFilter\Tests\Models\User;
-use Pradeepdev\SmartFilter\Traits\Filterable;
 
 beforeEach(function (): void {
     User::create(['name' => 'Alice', 'email' => 'alice@example.com', 'status' => 'active']);
@@ -17,7 +16,7 @@ it('silently ignores fields not in the allowed list', function (): void {
     // 'unknown_field' is not in $filterable, so it should be ignored — not throw.
     $request = Request::create('/users', 'GET', [
         'unknown_field' => 'some_value',
-        'status'        => 'active',
+        'status' => 'active',
     ]);
 
     $results = User::smartFilter($request)->get();
@@ -37,9 +36,11 @@ it('silently drops the sort key itself from filters', function (): void {
 });
 
 it('strict mode throws for a field not in allowed list', function (): void {
-    $model = new class extends User {
+    $model = new class extends User
+    {
         protected bool $filterStrict = true;
-        protected array $filterable  = ['name'];
+
+        protected array $filterable = ['name'];
     };
 
     $request = Request::create('/users', 'GET', ['status' => 'active']);

@@ -20,6 +20,7 @@ interface OperatorContract
      * Apply this operator's query logic to the builder.
      *
      * @template TModel of \Illuminate\Database\Eloquent\Model
+     *
      * @param  Builder<TModel>  $builder
      * @return Builder<TModel>
      */

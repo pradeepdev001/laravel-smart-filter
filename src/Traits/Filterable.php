@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Pradeepdev\SmartFilter\Builders\FilterBuilder;
 use Pradeepdev\SmartFilter\Contracts\OperatorRegistryContract;
+use Pradeepdev\SmartFilter\Parser\RequestParser;
+use Pradeepdev\SmartFilter\SmartFilterServiceProvider;
 use Pradeepdev\SmartFilter\Support\FieldGuard;
 use Pradeepdev\SmartFilter\Support\OperatorRegistry;
 
@@ -47,6 +49,7 @@ trait Filterable
      * Local Eloquent scope — the primary entry point.
      *
      * @template TModel of Model
+     *
      * @param  Builder<TModel>  $query
      * @param  Request|null  $request  Inject a custom Request for testing.
      * @return Builder<TModel>
@@ -81,7 +84,7 @@ trait Filterable
         // Always build the parser with model-level configuration so that
         // $searchable and $filterIgnore from the model are respected.
         // We pull sort/search param names from config so they remain consistent.
-        $parser = new \Pradeepdev\SmartFilter\Parser\RequestParser(
+        $parser = new RequestParser(
             ignoredFields: $filterIgnore,
             searchableFields: $searchable,
             sortParam: config('smart-filter.sort_param', 'sort'),
@@ -89,9 +92,9 @@ trait Filterable
         );
 
         /** @var OperatorRegistry $registry */
-        $registry = app()->bound(\Pradeepdev\SmartFilter\Contracts\OperatorRegistryContract::class)
-            ? app(\Pradeepdev\SmartFilter\Contracts\OperatorRegistryContract::class)
-            : \Pradeepdev\SmartFilter\SmartFilterServiceProvider::buildDefaultRegistry();
+        $registry = app()->bound(OperatorRegistryContract::class)
+            ? app(OperatorRegistryContract::class)
+            : SmartFilterServiceProvider::buildDefaultRegistry();
 
         $guard = new FieldGuard(
             allowedFields: $filterable,

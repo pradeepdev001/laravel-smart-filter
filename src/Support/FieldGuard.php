@@ -22,9 +22,9 @@ use Pradeepdev\SmartFilter\Exceptions\InvalidFilterFieldException;
 final class FieldGuard
 {
     /**
-     * @param  list<string>            $allowedFields   Empty means "all fields allowed".
-     * @param  list<string>            $ignoredFields   Always blocked regardless of allowed list.
-     * @param  array<string, string>   $aliases         Maps request param names to real column names.
+     * @param  list<string>  $allowedFields  Empty means "all fields allowed".
+     * @param  list<string>  $ignoredFields  Always blocked regardless of allowed list.
+     * @param  array<string, string>  $aliases  Maps request param names to real column names.
      */
     public function __construct(
         private readonly array $allowedFields = [],
@@ -37,7 +37,7 @@ final class FieldGuard
      * Validate and resolve a FilterInput.
      * Returns null if the field should be skipped silently (non-strict mode).
      *
-     * @throws InvalidFilterFieldException  In strict mode.
+     * @throws InvalidFilterFieldException In strict mode.
      */
     public function resolveFilter(FilterInput $input): ?FilterInput
     {
@@ -67,7 +67,7 @@ final class FieldGuard
      * Validate and resolve a SortInput.
      * Returns null if the field should be skipped silently (non-strict mode).
      *
-     * @throws InvalidFilterFieldException  In strict mode.
+     * @throws InvalidFilterFieldException In strict mode.
      */
     public function resolveSort(SortInput $input): ?SortInput
     {

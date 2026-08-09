@@ -10,7 +10,7 @@ use Pradeepdev\SmartFilter\Enums\Operator;
 use Pradeepdev\SmartFilter\Enums\SortDirection;
 
 it('starts empty', function (): void {
-    $collection = new FilterCollection();
+    $collection = new FilterCollection;
 
     expect($collection->isEmpty())->toBeTrue()
         ->and($collection->hasFilters())->toBeFalse()
@@ -19,8 +19,8 @@ it('starts empty', function (): void {
 });
 
 it('adds a filter immutably', function (): void {
-    $collection = new FilterCollection();
-    $input      = new FilterInput('name', Operator::Equals->value, 'Alice');
+    $collection = new FilterCollection;
+    $input = new FilterInput('name', Operator::Equals->value, 'Alice');
 
     $new = $collection->withFilter($input);
 
@@ -30,8 +30,8 @@ it('adds a filter immutably', function (): void {
 });
 
 it('adds a sort immutably', function (): void {
-    $collection = new FilterCollection();
-    $sort       = new SortInput('name', SortDirection::Asc);
+    $collection = new FilterCollection;
+    $sort = new SortInput('name', SortDirection::Asc);
 
     $new = $collection->withSort($sort);
 
@@ -40,8 +40,8 @@ it('adds a sort immutably', function (): void {
 });
 
 it('adds a search immutably', function (): void {
-    $collection = new FilterCollection();
-    $search     = new SearchInput('john', ['name', 'email']);
+    $collection = new FilterCollection;
+    $search = new SearchInput('john', ['name', 'email']);
 
     $new = $collection->withSearch($search);
 
@@ -51,7 +51,7 @@ it('adds a search immutably', function (): void {
 });
 
 it('is not empty when it has a filter', function (): void {
-    $collection = (new FilterCollection())->withFilter(
+    $collection = (new FilterCollection)->withFilter(
         new FilterInput('name', Operator::Equals->value, 'Alice')
     );
 

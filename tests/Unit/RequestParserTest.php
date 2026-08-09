@@ -9,7 +9,7 @@ use Pradeepdev\SmartFilter\Parser\RequestParser;
 
 it('parses a simple equals filter', function (): void {
     $request = Request::create('/', 'GET', ['status' => 'active']);
-    $parser  = new RequestParser();
+    $parser = new RequestParser;
 
     $collection = $parser->parse($request);
 
@@ -21,7 +21,7 @@ it('parses a simple equals filter', function (): void {
 
 it('parses a greater-than filter from inline key operator', function (): void {
     $request = Request::create('/', 'GET', ['age>' => '25']);
-    $parser  = new RequestParser();
+    $parser = new RequestParser;
 
     $collection = $parser->parse($request);
 
@@ -31,7 +31,7 @@ it('parses a greater-than filter from inline key operator', function (): void {
 
 it('parses ascending sort', function (): void {
     $request = Request::create('/', 'GET', ['sort' => 'name']);
-    $parser  = new RequestParser();
+    $parser = new RequestParser;
 
     $collection = $parser->parse($request);
 
@@ -42,7 +42,7 @@ it('parses ascending sort', function (): void {
 
 it('parses descending sort with minus prefix', function (): void {
     $request = Request::create('/', 'GET', ['sort' => '-created_at']);
-    $parser  = new RequestParser();
+    $parser = new RequestParser;
 
     $collection = $parser->parse($request);
 
@@ -51,7 +51,7 @@ it('parses descending sort with minus prefix', function (): void {
 
 it('parses multi-column sort', function (): void {
     $request = Request::create('/', 'GET', ['sort' => '-created_at,name']);
-    $parser  = new RequestParser();
+    $parser = new RequestParser;
 
     $collection = $parser->parse($request);
 
@@ -62,7 +62,7 @@ it('parses multi-column sort', function (): void {
 
 it('parses IN function value', function (): void {
     $request = Request::create('/', 'GET', ['country' => 'in(india,usa)']);
-    $parser  = new RequestParser();
+    $parser = new RequestParser;
 
     $collection = $parser->parse($request);
 
@@ -72,7 +72,7 @@ it('parses IN function value', function (): void {
 
 it('parses BETWEEN function value', function (): void {
     $request = Request::create('/', 'GET', ['price' => 'between(100,500)']);
-    $parser  = new RequestParser();
+    $parser = new RequestParser;
 
     $collection = $parser->parse($request);
 
@@ -82,7 +82,7 @@ it('parses BETWEEN function value', function (): void {
 
 it('parses null keyword as IS NULL operator', function (): void {
     $request = Request::create('/', 'GET', ['deleted_at' => 'null']);
-    $parser  = new RequestParser();
+    $parser = new RequestParser;
 
     $collection = $parser->parse($request);
 
@@ -92,7 +92,7 @@ it('parses null keyword as IS NULL operator', function (): void {
 
 it('parses not_null keyword as IS NOT NULL operator', function (): void {
     $request = Request::create('/', 'GET', ['deleted_at' => 'not_null']);
-    $parser  = new RequestParser();
+    $parser = new RequestParser;
 
     $collection = $parser->parse($request);
 
@@ -101,7 +101,7 @@ it('parses not_null keyword as IS NOT NULL operator', function (): void {
 
 it('parses "true" as a boolean filter', function (): void {
     $request = Request::create('/', 'GET', ['is_active' => 'true']);
-    $parser  = new RequestParser();
+    $parser = new RequestParser;
 
     $collection = $parser->parse($request);
 
@@ -110,7 +110,7 @@ it('parses "true" as a boolean filter', function (): void {
 
 it('parses search term', function (): void {
     $request = Request::create('/', 'GET', ['search' => 'john']);
-    $parser  = new RequestParser(searchableFields: ['name', 'email']);
+    $parser = new RequestParser(searchableFields: ['name', 'email']);
 
     $collection = $parser->parse($request);
 
@@ -121,12 +121,12 @@ it('parses search term', function (): void {
 
 it('excludes page, per_page, limit from filters', function (): void {
     $request = Request::create('/', 'GET', [
-        'page'     => '1',
+        'page' => '1',
         'per_page' => '15',
-        'limit'    => '10',
-        'name'     => 'Alice',
+        'limit' => '10',
+        'name' => 'Alice',
     ]);
-    $parser = new RequestParser();
+    $parser = new RequestParser;
 
     $collection = $parser->parse($request);
 
@@ -136,7 +136,7 @@ it('excludes page, per_page, limit from filters', function (): void {
 
 it('returns empty collection for empty request', function (): void {
     $request = Request::create('/', 'GET', []);
-    $parser  = new RequestParser();
+    $parser = new RequestParser;
 
     $collection = $parser->parse($request);
 

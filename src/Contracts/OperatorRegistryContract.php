@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Pradeepdev\SmartFilter\Contracts;
 
+use Pradeepdev\SmartFilter\Exceptions\UnknownOperatorException;
+
 /**
  * Contract for the operator registry.
  *
@@ -23,7 +25,7 @@ interface OperatorRegistryContract
     /**
      * Resolve an operator by its string name.
      *
-     * @throws \Pradeepdev\SmartFilter\Exceptions\UnknownOperatorException
+     * @throws UnknownOperatorException
      */
     public function resolve(string $name): OperatorContract;
 

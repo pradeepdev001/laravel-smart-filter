@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Pradeepdev\SmartFilter\Parser;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Pradeepdev\SmartFilter\Collections\FilterCollection;
 use Pradeepdev\SmartFilter\Contracts\ParserContract;
 use Pradeepdev\SmartFilter\DTOs\FilterInput;
@@ -56,12 +55,12 @@ final class RequestParser implements ParserContract
      * Map raw operator strings (from the URL) to canonical Operator enum values.
      */
     private const INLINE_OPERATOR_MAP = [
-        '>'  => Operator::GreaterThan,
+        '>' => Operator::GreaterThan,
         '>=' => Operator::GreaterThanOrEqual,
-        '<'  => Operator::LessThan,
+        '<' => Operator::LessThan,
         '<=' => Operator::LessThanOrEqual,
         '!=' => Operator::NotEquals,
-        '~'  => Operator::Like,
+        '~' => Operator::Like,
         '!~' => Operator::NotLike,
     ];
 
@@ -83,7 +82,7 @@ final class RequestParser implements ParserContract
 
     public function parse(Request $request): FilterCollection
     {
-        $collection = new FilterCollection();
+        $collection = new FilterCollection;
         $collection = $this->parseSorts($request, $collection);
         $collection = $this->parseSearch($request, $collection);
         $collection = $this->parseFilters($request, $collection);
@@ -150,7 +149,7 @@ final class RequestParser implements ParserContract
                 continue;
             }
 
-            $rawKeyStr   = (string) $rawKey;
+            $rawKeyStr = (string) $rawKey;
             $rawValueStr = (string) $rawValue;
 
             // Detect dot-notation: route to relation filter parser
@@ -240,7 +239,7 @@ final class RequestParser implements ParserContract
         }
 
         $fullField = $keyMatches['field']; // e.g. "posts.status" or "company.address.city"
-        $inlineOp  = $keyMatches['op'] ?? '';
+        $inlineOp = $keyMatches['op'] ?? '';
 
         $segments = explode('.', $fullField);
 
@@ -249,7 +248,7 @@ final class RequestParser implements ParserContract
         }
 
         // Last segment = leaf field, everything before = relation chain
-        $field    = array_pop($segments);
+        $field = array_pop($segments);
         $relation = $segments;
 
         $sanitisedValue = $this->sanitiseString($rawValue);
@@ -284,9 +283,9 @@ final class RequestParser implements ParserContract
             return null;
         }
 
-        $field       = $keyMatches['field'];
-        $inlineOp    = $keyMatches['op'] ?? '';
-        $sanitised   = $this->sanitiseString($rawValue);
+        $field = $keyMatches['field'];
+        $inlineOp = $keyMatches['op'] ?? '';
+        $sanitised = $this->sanitiseString($rawValue);
 
         // Inline operator takes precedence (e.g. ?age>=25)
         if ($inlineOp !== '') {
@@ -324,11 +323,11 @@ final class RequestParser implements ParserContract
             );
 
             $operator = match ($func) {
-                'in'          => Operator::In->value,
-                'not_in'      => Operator::NotIn->value,
-                'between'     => Operator::Between->value,
+                'in' => Operator::In->value,
+                'not_in' => Operator::NotIn->value,
+                'between' => Operator::Between->value,
                 'not_between' => Operator::NotBetween->value,
-                default       => Operator::Equals->value,
+                default => Operator::Equals->value,
             };
 
             return new FilterInput($field, $operator, $args);

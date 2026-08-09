@@ -13,10 +13,12 @@ use Pradeepdev\SmartFilter\Exceptions\InvalidFilterValueException;
 final class BooleanOperator implements OperatorContract
 {
     private const TRUTHY = ['true', '1'];
-    private const FALSY  = ['false', '0'];
+
+    private const FALSY = ['false', '0'];
 
     /**
      * @template TModel of \Illuminate\Database\Eloquent\Model
+     *
      * @param  Builder<TModel>  $builder
      * @return Builder<TModel>
      */

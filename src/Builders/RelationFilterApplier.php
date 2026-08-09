@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Pradeepdev\SmartFilter\Contracts\OperatorRegistryContract;
 use Pradeepdev\SmartFilter\DTOs\FilterInput;
 use Pradeepdev\SmartFilter\DTOs\RelationFilterInput;
+use Pradeepdev\SmartFilter\Support\FieldGuard;
 
 /**
  * Applies relation filter inputs to an Eloquent query builder.
@@ -33,16 +34,17 @@ final class RelationFilterApplier
      * Apply a single RelationFilterInput to the builder.
      *
      * @template TModel of \Illuminate\Database\Eloquent\Model
+     *
      * @param  Builder<TModel>  $builder
      * @return Builder<TModel>
      */
     public function apply(Builder $builder, RelationFilterInput $input): Builder
     {
         return match ($input->operator) {
-            'has'         => $builder->has($input->rootRelation()),
+            'has' => $builder->has($input->rootRelation()),
             'doesnt_have' => $builder->doesntHave($input->rootRelation()),
-            'or_has'      => $builder->orHas($input->rootRelation()),
-            default       => $this->applyWhereHas($builder, $input),
+            'or_has' => $builder->orHas($input->rootRelation()),
+            default => $this->applyWhereHas($builder, $input),
         };
     }
 
@@ -50,13 +52,14 @@ final class RelationFilterApplier
 
     /**
      * @template TModel of \Illuminate\Database\Eloquent\Model
+     *
      * @param  Builder<TModel>  $builder
      * @return Builder<TModel>
      */
     private function applyWhereHas(Builder $builder, RelationFilterInput $input): Builder
     {
         $rootRelation = $input->rootRelation();
-        $nested       = $input->withoutRootRelation();
+        $nested = $input->withoutRootRelation();
 
         return $builder->whereHas($rootRelation, function (Builder $subQuery) use ($nested): void {
             if (count($nested->relation) > 0) {
@@ -73,6 +76,7 @@ final class RelationFilterApplier
 
     /**
      * @template TModel of \Illuminate\Database\Eloquent\Model
+     *
      * @param  Builder<TModel>  $builder
      */
     private function applyLeafFilter(Builder $builder, RelationFilterInput $input): void
@@ -84,9 +88,9 @@ final class RelationFilterApplier
         // Use a permissive guard for relation leaf fields — the field belongs to
         // the related model's table, not the parent's. The parent's $filterable
         // whitelist must not block valid fields on the related model.
-        $permissiveGuard = new \Pradeepdev\SmartFilter\Support\FieldGuard();
-        $flatInput       = new FilterInput($input->field, $input->operator, $input->value);
-        $resolved        = $permissiveGuard->resolveFilter($flatInput);
+        $permissiveGuard = new FieldGuard;
+        $flatInput = new FilterInput($input->field, $input->operator, $input->value);
+        $resolved = $permissiveGuard->resolveFilter($flatInput);
 
         if ($resolved === null) {
             return;

@@ -41,9 +41,9 @@ it('strips null bytes from filter values', function (): void {
 
 it('ignores reserved query params page and per_page', function (): void {
     $request = Request::create('/users', 'GET', [
-        'page'     => '2',
+        'page' => '2',
         'per_page' => '10',
-        'name'     => 'Alice',
+        'name' => 'Alice',
     ]);
 
     $results = User::smartFilter($request)->get();

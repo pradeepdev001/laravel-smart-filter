@@ -8,7 +8,7 @@ use Pradeepdev\SmartFilter\Parser\RequestParser;
 
 it('parses a dot-notation param as a relation filter', function (): void {
     $request = Request::create('/', 'GET', ['posts.status' => 'published']);
-    $parser  = new RequestParser();
+    $parser = new RequestParser;
 
     $collection = $parser->parse($request);
 
@@ -24,10 +24,10 @@ it('parses a dot-notation param as a relation filter', function (): void {
 
 it('parses a nested dot-notation param', function (): void {
     $request = Request::create('/', 'GET', ['company.address.city' => 'London']);
-    $parser  = new RequestParser();
+    $parser = new RequestParser;
 
     $collection = $parser->parse($request);
-    $rel        = $collection->relationFilters()[0];
+    $rel = $collection->relationFilters()[0];
 
     expect($rel->relation)->toBe(['company', 'address'])
         ->and($rel->field)->toBe('city')
@@ -36,10 +36,10 @@ it('parses a nested dot-notation param', function (): void {
 
 it('parses a relation filter with inline operator', function (): void {
     $request = Request::create('/', 'GET', ['posts.title~' => 'laravel']);
-    $parser  = new RequestParser();
+    $parser = new RequestParser;
 
     $collection = $parser->parse($request);
-    $rel        = $collection->relationFilters()[0];
+    $rel = $collection->relationFilters()[0];
 
     expect($rel->operator)->toBe(Operator::Like->value)
         ->and($rel->value)->toBe('laravel');
@@ -47,10 +47,10 @@ it('parses a relation filter with inline operator', function (): void {
 
 it('parses a has existence check', function (): void {
     $request = Request::create('/', 'GET', ['posts' => 'has']);
-    $parser  = new RequestParser();
+    $parser = new RequestParser;
 
     $collection = $parser->parse($request);
-    $rel        = $collection->relationFilters()[0];
+    $rel = $collection->relationFilters()[0];
 
     expect($rel->relation)->toBe(['posts'])
         ->and($rel->field)->toBeNull()
@@ -60,10 +60,10 @@ it('parses a has existence check', function (): void {
 
 it('parses a doesntHave existence check', function (): void {
     $request = Request::create('/', 'GET', ['posts' => 'doesntHave']);
-    $parser  = new RequestParser();
+    $parser = new RequestParser;
 
     $collection = $parser->parse($request);
-    $rel        = $collection->relationFilters()[0];
+    $rel = $collection->relationFilters()[0];
 
     expect($rel->operator)->toBe('doesnt_have')
         ->and($rel->isExistenceCheck())->toBeTrue();
@@ -71,10 +71,10 @@ it('parses a doesntHave existence check', function (): void {
 
 it('parses a relation filter with IN operator', function (): void {
     $request = Request::create('/', 'GET', ['roles.name' => 'in(admin,editor)']);
-    $parser  = new RequestParser();
+    $parser = new RequestParser;
 
     $collection = $parser->parse($request);
-    $rel        = $collection->relationFilters()[0];
+    $rel = $collection->relationFilters()[0];
 
     expect($rel->operator)->toBe(Operator::In->value)
         ->and($rel->value)->toBe(['admin', 'editor']);
@@ -82,7 +82,7 @@ it('parses a relation filter with IN operator', function (): void {
 
 it('does not parse flat fields as relation filters', function (): void {
     $request = Request::create('/', 'GET', ['status' => 'active', 'name~' => 'alice']);
-    $parser  = new RequestParser();
+    $parser = new RequestParser;
 
     $collection = $parser->parse($request);
 
@@ -92,10 +92,10 @@ it('does not parse flat fields as relation filters', function (): void {
 
 it('can mix flat and relation filters in the same request', function (): void {
     $request = Request::create('/', 'GET', [
-        'status'       => 'active',
+        'status' => 'active',
         'posts.status' => 'published',
     ]);
-    $parser = new RequestParser();
+    $parser = new RequestParser;
 
     $collection = $parser->parse($request);
 
