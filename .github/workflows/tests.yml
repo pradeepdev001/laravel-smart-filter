@@ -107,4 +107,4 @@ jobs:
         if: matrix.php == '8.4' && matrix.laravel == '12.*' && matrix.stability == 'prefer-stable'
         env:
           XDEBUG_MODE: coverage
-        run: vendor/bin/pest --configuration=phpunit.xml --coverage --min=80
+        run: php -d xdebug.mode=coverage vendor/bin/pest --configuration=phpunit.xml --coverage --coverage-filter=src --min=80
