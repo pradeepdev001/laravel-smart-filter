@@ -105,4 +105,6 @@ jobs:
 
       - name: Run tests with coverage
         if: matrix.php == '8.4' && matrix.laravel == '12.*' && matrix.stability == 'prefer-stable'
+        env:
+          XDEBUG_MODE: coverage
         run: vendor/bin/pest --configuration=phpunit.xml --coverage --min=80
