@@ -11,15 +11,15 @@ namespace Pradeepdev\SmartFilter\DTOs;
  * to a FilterInput: which field, which operator, and what value.
  * This travels through the pipeline untouched.
  */
-final readonly class FilterInput
+final class FilterInput
 {
     /**
      * @param  mixed  $value  The raw (but sanitised) value from the request.
      */
     public function __construct(
-        public string $field,
-        public string $operator,
-        public mixed $value,
+        public readonly string $field,
+        public readonly string $operator,
+        public readonly mixed $value,
     ) {}
 
     /**

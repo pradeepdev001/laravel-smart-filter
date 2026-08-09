@@ -12,11 +12,11 @@ use Pradeepdev\SmartFilter\Enums\SortDirection;
  * ?sort=-created_at  → field=created_at, direction=DESC
  * ?sort=name         → field=name, direction=ASC
  */
-final readonly class SortInput
+final class SortInput
 {
     public function __construct(
-        public string $field,
-        public SortDirection $direction,
+        public readonly string $field,
+        public readonly SortDirection $direction,
     ) {}
 
     /**

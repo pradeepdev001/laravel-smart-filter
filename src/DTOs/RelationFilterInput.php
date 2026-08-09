@@ -15,16 +15,16 @@ namespace Pradeepdev\SmartFilter\DTOs;
  *
  * @param  list<string>  $relation  The chain of relationship method names to traverse.
  */
-final readonly class RelationFilterInput
+final class RelationFilterInput
 {
     /**
      * @param  list<string>  $relation
      */
     public function __construct(
-        public array $relation,
-        public ?string $field,
-        public string $operator,
-        public mixed $value,
+        public readonly array $relation,
+        public readonly ?string $field,
+        public readonly string $operator,
+        public readonly mixed $value,
     ) {}
 
     /**

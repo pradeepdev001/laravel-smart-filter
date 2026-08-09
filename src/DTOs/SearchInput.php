@@ -9,13 +9,13 @@ namespace Pradeepdev\SmartFilter\DTOs;
  *
  * @param  list<string>  $fields  The columns to search across.
  */
-final readonly class SearchInput
+final class SearchInput
 {
     /**
      * @param  list<string>  $fields
      */
     public function __construct(
-        public string $term,
-        public array $fields,
+        public readonly string $term,
+        public readonly array $fields,
     ) {}
 }
